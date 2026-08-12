@@ -1,0 +1,890 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un rato en Valencia -- Sábado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF4EC;
+    --ink:#2B2420;
+    --magenta:#C23874;
+    --magenta-deep:#8E2657;
+    --leaf:#2F4B3A;
+    --terracotta:#D9662E;
+    --gold:#E7B24A;
+    --line: rgba(43,36,32,0.14);
+    --card-bg:#fff;
+  }
+  body.dark{
+    --cream:#241E1B;
+    --ink:#F3EAE1;
+    --line: rgba(243,234,225,0.16);
+    --card-bg:#332B26;
+  }
+  body.dark .card, body.dark .pill, body.dark .chip, body.dark .summary, body.dark .card-other input, body.dark .guest-row input{
+    background:var(--card-bg);
+    color:var(--ink);
+  }
+  body.dark #countdown{ background:var(--card-bg); }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+  }
+  .wrap{
+    max-width:560px;
+    margin:0 auto;
+    padding:0 22px 80px;
+    position:relative;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:64px 0 40px;
+    position:relative;
+    overflow:hidden;
+  }
+  .branch{
+    position:absolute;
+    top:-10px;
+    right:-40px;
+    width:220px;
+    opacity:0.9;
+    pointer-events:none;
+  }
+  .branch2{
+    position:absolute;
+    bottom:-30px;
+    left:-50px;
+    width:180px;
+    opacity:0.55;
+    transform:scaleX(-1) rotate(8deg);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-size:13px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--magenta-deep);
+    font-weight:600;
+    margin:0 0 14px;
+  }
+  h1{
+    font-size:clamp(34px,8vw,46px);
+    line-height:1.08;
+    margin:0 0 18px;
+    color:var(--ink);
+    position:relative;
+    z-index:2;
+  }
+  h1 em{
+    font-style:italic;
+    color:var(--magenta);
+  }
+  .lede{
+    font-size:16.5px;
+    line-height:1.65;
+    max-width:44ch;
+    color:rgba(43,36,32,0.82);
+    position:relative;
+    z-index:2;
+  }
+
+  /* ---------- petals ---------- */
+  .petal{
+    position:fixed;
+    top:-20px;
+    width:14px;
+    height:14px;
+    background:var(--magenta);
+    border-radius:0 60% 0 60%;
+    opacity:0.55;
+    pointer-events:none;
+    z-index:0;
+    animation:fall linear infinite;
+  }
+  @keyframes fall{
+    to{ transform:translateY(110vh) rotate(200deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .petal{ display:none; }
+  }
+
+  /* ---------- section shell ---------- */
+  section{
+    padding:34px 0;
+    border-top:1px solid var(--line);
+  }
+  .tag{
+    font-size:12.5px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--leaf);
+    font-weight:600;
+    margin:0 0 10px;
+  }
+  h2{
+    font-size:24px;
+    margin:0 0 6px;
+  }
+  .hint{
+    font-size:14.5px;
+    color:rgba(43,36,32,0.62);
+    margin:0 0 20px;
+    line-height:1.5;
+  }
+
+  /* ---------- time picker ---------- */
+  .chip-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .chip{
+    appearance:none;
+    border:1.5px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+    font-family:inherit;
+    font-size:14.5px;
+    font-weight:500;
+    padding:11px 16px;
+    border-radius:100px;
+    cursor:pointer;
+    transition:all .18s ease;
+  }
+  .chip:hover{ border-color:var(--magenta); }
+  .chip.active{
+    background:var(--magenta);
+    border-color:var(--magenta);
+    color:#fff;
+  }
+
+  /* ---------- cards (lugares) ---------- */
+  .cards{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .card{
+    border:1.5px solid var(--line);
+    background:#fff;
+    border-radius:16px;
+    padding:16px 18px;
+    cursor:pointer;
+    transition:all .18s ease;
+    position:relative;
+  }
+  .card:hover{ border-color:var(--terracotta); }
+  .card.active{
+    border-color:var(--magenta);
+    background:linear-gradient(0deg, rgba(194,56,116,0.05), rgba(194,56,116,0.05));
+  }
+  .card.active::after{
+    content:"✓";
+    position:absolute;
+    top:14px;
+    right:16px;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--magenta);
+    color:#fff;
+    font-size:12px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .card .name{
+    font-family:'Fraunces', serif;
+    font-size:17px;
+    font-weight:500;
+    margin:0 0 3px;
+  }
+  .card .desc{
+    font-size:13.5px;
+    color:rgba(43,36,32,0.6);
+    margin:0;
+  }
+  .card-other{
+    margin-top:4px;
+  }
+  .card-other input{
+    width:100%;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:12px 14px;
+    font-family:inherit;
+    font-size:14.5px;
+    background:#fff;
+    color:var(--ink);
+  }
+  .card-other input:focus{ outline:2px solid var(--magenta); outline-offset:1px; }
+
+  /* ---------- bebida pills ---------- */
+  .pill-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+  }
+  .pill{
+    border:1.5px solid var(--line);
+    background:#fff;
+    border-radius:12px;
+    padding:13px 14px;
+    font-size:14px;
+    font-weight:500;
+    cursor:pointer;
+    text-align:left;
+    transition:all .18s ease;
+  }
+  .pill.active{
+    border-color:var(--gold);
+    background:rgba(231,178,74,0.14);
+  }
+
+  /* ---------- invitados ---------- */
+  .guest-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:10px;
+  }
+  .guest-row input{
+    flex:1;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:12px 14px;
+    font-family:inherit;
+    font-size:14.5px;
+    background:#fff;
+    color:var(--ink);
+  }
+  .guest-row input:focus{ outline:2px solid var(--magenta); outline-offset:1px; }
+  .add-guest{
+    background:none;
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+    padding:10px 14px;
+    font-family:inherit;
+    font-size:13.5px;
+    color:var(--leaf);
+    cursor:pointer;
+    width:100%;
+    text-align:center;
+    font-weight:500;
+  }
+  .add-guest:hover{ border-color:var(--leaf); }
+
+  /* ---------- respuesta ---------- */
+  .answer-block{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .btn{
+    width:100%;
+    border:none;
+    border-radius:14px;
+    padding:17px 20px;
+    font-family:inherit;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:transform .12s ease, opacity .12s ease;
+  }
+  .btn:active{ transform:scale(0.98); }
+  .btn-yes{
+    background:var(--magenta);
+    color:#fff;
+  }
+  .btn-yes[disabled]{
+    opacity:0.4;
+    cursor:not-allowed;
+  }
+  .btn-no{
+    background:transparent;
+    color:rgba(43,36,32,0.55);
+    border:1.5px solid var(--line);
+  }
+  .btn-no:hover{ color:var(--ink); border-color:var(--ink); }
+
+  /* ---------- final states ---------- */
+  .final{
+    display:none;
+    padding:60px 0;
+    text-align:center;
+  }
+  .final.show{ display:block; }
+  .final .icon{
+    font-size:40px;
+    margin-bottom:18px;
+    display:block;
+  }
+  .final h2{ margin-bottom:10px; }
+  .final p{
+    color:rgba(43,36,32,0.7);
+    font-size:15px;
+    line-height:1.6;
+    max-width:38ch;
+    margin:0 auto;
+  }
+  .summary{
+    text-align:left;
+    background:#fff;
+    border:1.5px solid var(--line);
+    border-radius:16px;
+    padding:18px 20px;
+    margin:24px 0;
+    font-size:14.5px;
+    line-height:2;
+  }
+  .summary b{ color:var(--magenta-deep); }
+  .wa-link{
+    display:inline-block;
+    margin-top:6px;
+    background:#25D366;
+    color:#fff;
+    text-decoration:none;
+    padding:14px 26px;
+    border-radius:100px;
+    font-weight:600;
+    font-size:15px;
+  }
+
+  #screen-form.hidden, #screen-yes.hidden, #screen-no.hidden{ display:none; }
+
+  footer{
+    text-align:center;
+    font-size:12.5px;
+    color:rgba(43,36,32,0.4);
+    padding-top:30px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap" id="screen-form">
+  <div class="hero">
+    <svg class="branch" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M180 10C160 30 140 20 120 40C100 60 110 80 90 95" stroke="#2F4B3A" stroke-width="2" stroke-linecap="round"/>
+      <g fill="#C23874"><ellipse cx="150" cy="20" rx="10" ry="16" transform="rotate(30 150 20)"/><ellipse cx="130" cy="35" rx="9" ry="14" transform="rotate(-10 130 35)"/><ellipse cx="115" cy="55" rx="10" ry="15" transform="rotate(50 115 55)"/><ellipse cx="95" cy="80" rx="8" ry="13" transform="rotate(10 95 80)"/></g>
+      <g fill="#2F4B3A" opacity="0.7"><ellipse cx="165" cy="15" rx="6" ry="10" transform="rotate(20 165 15)"/><ellipse cx="105" cy="65" rx="6" ry="10" transform="rotate(-30 105 65)"/></g>
+    </svg>
+    <svg class="branch2" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M180 10C160 30 140 20 120 40C100 60 110 80 90 95" stroke="#2F4B3A" stroke-width="2" stroke-linecap="round"/>
+      <g fill="#D9662E"><ellipse cx="150" cy="20" rx="10" ry="16" transform="rotate(30 150 20)"/><ellipse cx="130" cy="35" rx="9" ry="14" transform="rotate(-10 130 35)"/><ellipse cx="115" cy="55" rx="10" ry="15" transform="rotate(50 115 55)"/></g>
+    </svg>
+    <p class="eyebrow" data-es="Valencia · Sábado" data-pt="Valência · Sábado">Valencia · Sábado</p>
+    <h1 data-es="Hola Katy,<br>¿nos vemos <em>un rato</em>?" data-pt="Olá Katy,<br>a gente se vê <em>um pouco</em>?">Hola Katy,<br>¿nos vemos <em>un rato</em>?</h1>
+    <p class="lede" data-es="Como amigos, sin prisa. Elige lo que te apetezca -- el lugar, la comida, la hora -- y si quieres traer a alguien más, también hay sitio." data-pt="Como amigos, sem pressa. Escolhe o que quiseres -- o lugar, a comida, a hora -- e se quiseres trazer mais alguém, também há espaço.">Como amigos, sin prisa. Elige lo que te apetezca -- el lugar, la comida, la hora -- y si quieres traer a alguien más, también hay sitio.</p>
+
+    <div style="display:flex; align-items:center; gap:14px; margin-top:24px; position:relative; z-index:2;">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https%3A%2F%2Fwa.me%2F351933333225%3Ftext%3DHola%2520Nadiel%2520%25F0%259F%258C%25BA" alt="QR para WhatsApp" style="border-radius:10px; border:1.5px solid var(--line);">
+      <p style="font-size:12.5px; color:rgba(43,36,32,0.6); max-width:20ch; margin:0;" data-es="Escanea para escribirme directo por WhatsApp" data-pt="Digitaliza para me escrever direto no WhatsApp">Escanea para escribirme directo por WhatsApp</p>
+    </div>
+
+    <button id="lang-toggle" style="position:absolute; top:0; right:52px; background:none; border:1.5px solid var(--line); border-radius:100px; padding:7px 14px; font-family:inherit; font-size:12.5px; font-weight:600; cursor:pointer; color:var(--ink); z-index:3;">PT</button>
+    <button id="theme-toggle" style="position:absolute; top:0; right:0; background:none; border:1.5px solid var(--line); border-radius:100px; width:34px; height:34px; font-family:inherit; font-size:14px; cursor:pointer; z-index:3;">🌙</button>
+
+    <div id="countdown" style="margin-top:22px; display:inline-flex; align-items:center; gap:8px; background:#fff; border:1.5px solid var(--line); border-radius:100px; padding:9px 16px; position:relative; z-index:2; font-size:13.5px; font-weight:600; color:var(--magenta-deep);">
+      ⏳ <span id="countdown-text"></span>
+    </div>
+  </div>
+
+  <section>
+    <p class="tag" data-es="¿Sabías que...?" data-pt="Sabias que...?">¿Sabías que...?</p>
+    <p class="hint" id="curiosity-text" style="margin:0;">El Jardín de Monforte es uno de los jardines históricos más antiguos de Valencia, con más de 150 años.</p>
+  </section>
+
+  <section>
+    <p class="tag" data-es="Día" data-pt="Dia">Día</p>
+    <h2 data-es="¿Qué día te viene mejor?" data-pt="Que dia te vem melhor?">¿Qué día te viene mejor?</h2>
+    <p class="hint" data-es="Habíamos hablado del sábado, pero si te viene mejor otro día, dímelo." data-pt="Tínhamos falado de sábado, mas se te vier melhor outro dia, diz-me.">Habíamos hablado del sábado, pero si te viene mejor otro día, dímelo.</p>
+    <div class="chip-row" id="day-group">
+      <button class="chip active" data-val="Sábado">Sábado</button>
+      <button class="chip" data-val="Domingo">Domingo</button>
+      <button class="chip" data-val="Viernes">Viernes</button>
+      <button class="chip" data-val="Otro día">Otro día</button>
+    </div>
+  </section>
+
+  <section>
+    <p class="tag" data-es="Hora" data-pt="Hora">Hora</p>
+    <h2 data-es="¿A qué hora te viene mejor?" data-pt="A que horas te vem melhor?">¿A qué hora te viene mejor?</h2>
+    <p class="hint" data-es="Elige lo que encaje con tu día." data-pt="Escolhe o que encaixar no teu dia.">Elige lo que encaje con tu día.</p>
+    <div class="chip-row" id="time-group">
+      <button class="chip" data-val="Mañana (10:00)">Mañana · 10:00</button>
+      <button class="chip" data-val="Mediodía (13:00)">Mediodía · 13:00</button>
+      <button class="chip" data-val="Tarde (17:00)">Tarde · 17:00</button>
+      <button class="chip" data-val="Otra hora">Otra hora</button>
+    </div>
+  </section>
+
+  <section>
+    <p class="tag" data-es="Lugar" data-pt="Lugar">Lugar</p>
+    <h2 data-es="¿Dónde te apetece?" data-pt="Onde te apetece?">¿Dónde te apetece?</h2>
+    <p class="hint" data-es="Recordé que te gusta el Jardín de Monforte, pero si tienes otro lugar favorito, dímelo." data-pt="Lembrei que gostas do Jardim de Monforte, mas se tiveres outro lugar favorito, diz-me.">Recordé que te gusta el Jardín de Monforte, pero si tienes otro lugar favorito, dímelo.</p>
+    <div class="cards" id="place-group">
+      <div class="card" data-val="Jardín de Monforte + café">
+        <p class="name">Jardín de Monforte</p>
+        <p class="desc">Un paseo tranquilo y después un café cerca</p>
+      </div>
+      <div class="card" data-val="Turia (jardines del río)">
+        <p class="name">Jardín del Turia</p>
+        <p class="desc">Caminar por el río, con calma</p>
+      </div>
+      <div class="card" data-val="Barrio del Carmen">
+        <p class="name">Barrio del Carmen</p>
+        <p class="desc">Calles, algo de historia y buen ambiente</p>
+      </div>
+      <div class="card" data-val="Otro lugar">
+        <p class="name">Otro lugar</p>
+        <p class="desc">Tú eliges, dime cuál</p>
+        <div class="card-other" style="display:none;">
+          <input type="text" id="place-other" placeholder="¿Cuál?">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="tag" data-es="Para tomar" data-pt="Para beber">Para tomar</p>
+    <h2 data-es="¿Qué te apetece?" data-pt="O que te apetece?">¿Qué te apetece?</h2>
+    <p class="hint" data-es="Un poco de cada país 🌎 (puedes elegir varias)" data-pt="Um pouco de cada país 🌎 (podes escolher várias)">Un poco de cada país 🌎 (puedes elegir varias)</p>
+    <div class="pill-grid" id="drink-group">
+      <button class="pill" data-val="Horchata (España)">🥛 Horchata · ES</button>
+      <button class="pill" data-val="Sangría (España)">🍷 Sangría · ES</button>
+      <button class="pill" data-val="Tinto de verano (España)">🍹 Tinto de verano · ES</button>
+      <button class="pill" data-val="Café con leche (España)">☕ Café con leche · ES</button>
+      <button class="pill" data-val="Jugo de lulo (Colombia)">🍈 Jugo de lulo · CO</button>
+      <button class="pill" data-val="Lulada (Colombia)">🥤 Lulada · CO</button>
+      <button class="pill" data-val="Aguapanela (Colombia)">🍯 Aguapanela · CO</button>
+      <button class="pill" data-val="Café colombiano (Colombia)">☕ Café colombiano · CO</button>
+      <button class="pill" data-val="Papelón con limón (Venezuela)">🍋 Papelón con limón · VE</button>
+      <button class="pill" data-val="Chicha venezolana (Venezuela)">🌽 Chicha · VE</button>
+      <button class="pill" data-val="Malta (Venezuela)">🥤 Malta · VE</button>
+      <button class="pill" data-val="Cocada (Venezuela)">🥥 Cocada · VE</button>
+    </div>
+  </section>
+
+  <section>
+    <p class="tag" data-es="Para comer" data-pt="Para comer">Para comer</p>
+    <h2 data-es="¿Con qué plato te tienta?" data-pt="Com que prato te apetece?">¿Con qué plato te tienta?</h2>
+    <p class="hint" data-es="Elige uno o varios -- te digo dónde probarlos en Valencia." data-pt="Escolhe um ou vários -- digo-te onde provar em Valência.">Elige uno o varios -- te digo dónde probarlos en Valencia.</p>
+    <div class="cards" id="food-group">
+      <div class="card" data-val="Pabellón criollo" data-place="La Cachapera, Carrer de Sueca 46">
+        <p class="name">🇻🇪 Pabellón criollo</p>
+        <p class="desc">Se puede probar en La Cachapera (Carrer de Sueca, 46)</p>
+      </div>
+      <div class="card" data-val="Cachapa con queso" data-place="La Cachapera, Carrer de Sueca 46">
+        <p class="name">🇻🇪 Cachapa con queso</p>
+        <p class="desc">Se puede probar en La Cachapera (Carrer de Sueca, 46)</p>
+      </div>
+      <div class="card" data-val="Tequeños" data-place="Brutal58, Av. del Regne de València 24">
+        <p class="name">🇻🇪 Tequeños</p>
+        <p class="desc">Se puede probar en Brutal58 (Av. del Regne de València, 24)</p>
+      </div>
+      <div class="card" data-val="Bandeja paisa" data-place="Mi Gente Colombian Food, Carrer d'Alberic 41">
+        <p class="name">🇨🇴 Bandeja paisa</p>
+        <p class="desc">Se puede probar en Mi Gente Colombian Food (Carrer d'Alberic, 41)</p>
+      </div>
+      <div class="card" data-val="Empanadas colombianas" data-place="Antojos Colombianos, Av. de Gaspar Aguilar 91">
+        <p class="name">🇨🇴 Empanadas colombianas</p>
+        <p class="desc">Se puede probar en Antojos Colombianos (Av. de Gaspar Aguilar, 91)</p>
+      </div>
+      <div class="card" data-val="Paella valenciana" data-place="Los Gómez, Carrer de Correus 10">
+        <p class="name">🇪🇸 Paella valenciana</p>
+        <p class="desc">Se puede probar en Los Gómez (Carrer de Correus, 10)</p>
+      </div>
+      <div class="card" data-val="Croquetas y tapas" data-place="Los Gómez, Carrer de Correus 10">
+        <p class="name">🇪🇸 Croquetas y tapas</p>
+        <p class="desc">Se puede probar en Los Gómez (Carrer de Correus, 10)</p>
+      </div>
+      <div class="card" data-val="Otro plato">
+        <p class="name">✨ Otro plato</p>
+        <p class="desc">Tú eliges, dime cuál</p>
+        <div class="card-other" style="display:none;">
+          <input type="text" id="food-other" placeholder="¿Cuál?">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="tag" data-es="Compañía" data-pt="Companhia">Compañía</p>
+    <h2 data-es="¿Vienes sola o te acompaña alguien?" data-pt="Vens sozinha ou vem alguém contigo?">¿Vienes sola o te acompaña alguien?</h2>
+    <p class="hint" data-es="Si quieres traer a tu mamá, una amiga o quien sea, hay espacio de sobra." data-pt="Se quiseres trazer a tua mãe, uma amiga ou quem for, há espaço de sobra.">Si quieres traer a tu mamá, una amiga o quien sea, hay espacio de sobra.</p>
+    <div id="guest-list"></div>
+    <button class="add-guest" id="add-guest-btn">+ Añadir a alguien</button>
+  </section>
+
+  <section>
+    <p class="tag" data-es="Tu respuesta" data-pt="A tua resposta">Tu respuesta</p>
+    <h2 data-es="¿Quedamos?" data-pt="Combinamos?">¿Quedamos?</h2>
+    <p class="hint" data-es="Sin presión -- si prefieres decir que no, también está bien." data-pt="Sem pressão -- se preferires dizer que não, também está tudo bem.">Sin presión -- si prefieres decir que no, también está bien.</p>
+    <div class="answer-block">
+      <button class="btn btn-yes" id="btn-yes" data-es="Sí, quedamos el sábado" data-pt="Sim, combinamos para sábado">Sí, quedamos el sábado</button>
+      <button class="btn btn-no" id="btn-no" data-es="Esta vez no puedo" data-pt="Desta vez não posso">Esta vez no puedo</button>
+    </div>
+  </section>
+
+  <footer data-es="Hecho con cariño para Katy 🌺" data-pt="Feito com carinho para a Katy 🌺">Hecho con cariño para Katy 🌺</footer>
+</div>
+
+<div class="wrap final" id="screen-yes">
+  <span class="icon" id="yes-icon">🌺</span>
+  <h2 data-es="¡Qué alegría!" data-pt="Que alegria!">¡Qué alegría!</h2>
+  <p data-es="Esto es lo que has elegido:" data-pt="Isto é o que escolheste:">Esto es lo que has elegido:</p>
+  <div class="summary" id="summary-yes"></div>
+  <div id="map-wrap" style="margin:18px 0; display:none;">
+    <a id="map-link" href="#" target="_blank" class="btn btn-no" style="display:block; text-align:center; text-decoration:none;">📍 Ver el lugar en el mapa</a>
+  </div>
+  <a class="wa-link" id="wa-link-yes" href="#" target="_blank" data-es="Enviar por WhatsApp" data-pt="Enviar por WhatsApp">Enviar por WhatsApp</a>
+  <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
+    <button class="btn btn-no" id="btn-calendar" style="max-width:280px; margin:0 auto;" data-es="📅 Añadir al calendario" data-pt="📅 Adicionar ao calendário">📅 Añadir al calendario</button>
+    <a class="btn btn-no" id="link-weather" href="#" target="_blank" style="max-width:280px; margin:0 auto; text-decoration:none; display:block; text-align:center;" data-es="☀️ Ver el tiempo del día" data-pt="☀️ Ver a previsão do tempo">☀️ Ver el tiempo del día</a>
+  </div>
+</div>
+
+<div class="wrap final" id="screen-no">
+  <span class="icon">🫂</span>
+  <h2 data-es="Vale, no hay problema" data-pt="Tudo bem, sem problema">Vale, no hay problema</h2>
+  <p data-es="Gracias por decírmelo. La amistad sigue igual, sin ningún problema." data-pt="Obrigado por me dizeres. A amizade continua igual, sem problema nenhum.">Gracias por decírmelo. La amistad sigue igual, sin ningún problema.</p>
+  <a class="wa-link" id="wa-link-no" href="#" target="_blank" style="background:var(--leaf);" data-es="Avisar por WhatsApp" data-pt="Avisar por WhatsApp">Avisar por WhatsApp</a>
+</div>
+
+<script>
+  // Numero de WhatsApp - campo facil de editar
+  const WHATSAPP_NUMBER = "351933333225";
+
+  let selected = { day:"Sábado", time:null, place:null, placeOther:"", drinks:[], foods:[], foodOther:"", guests:[] };
+
+  // idioma PT/ES
+  let currentLang = 'es';
+  document.getElementById('lang-toggle').addEventListener('click', ()=>{
+    currentLang = currentLang === 'es' ? 'pt' : 'es';
+    document.getElementById('lang-toggle').textContent = currentLang === 'es' ? 'PT' : 'ES';
+    document.querySelectorAll('[data-es][data-pt]').forEach(el=>{
+      el.innerHTML = el.dataset[currentLang];
+    });
+  });
+
+  // tema claro/escuro
+  const themeBtn = document.getElementById('theme-toggle');
+  function applyTheme(mode){
+    document.body.classList.toggle('dark', mode === 'dark');
+    themeBtn.textContent = mode === 'dark' ? '☀️' : '🌙';
+  }
+  const hourNow = new Date().getHours();
+  applyTheme((hourNow >= 20 || hourNow < 7) ? 'dark' : 'light');
+  themeBtn.addEventListener('click', ()=>{
+    applyTheme(document.body.classList.contains('dark') ? 'light' : 'dark');
+  });
+
+  // contador hasta el día elegido
+  function updateCountdown(){
+    const map = { 'Domingo':0, 'Sábado':6, 'Viernes':5 };
+    const target = map[selected.day] ?? 6;
+    const today = new Date();
+    let diff = (target - today.getDay() + 7) % 7;
+    if(diff === 0) diff = 7;
+    const es = diff === 1 ? `¡Falta 1 día para el ${selected.day.toLowerCase()}!` : `Faltan ${diff} días para el ${selected.day.toLowerCase()}`;
+    const pt = diff === 1 ? `Falta 1 dia para ${selected.day==='Sábado'?'sábado':selected.day.toLowerCase()}!` : `Faltam ${diff} dias para ${selected.day==='Sábado'?'sábado':selected.day.toLowerCase()}`;
+    const el = document.getElementById('countdown-text');
+    el.dataset.es = es; el.dataset.pt = pt;
+    el.textContent = currentLang === 'es' ? es : pt;
+  }
+
+  // curiosidades por sección
+  const curiosities = {
+    day: { es:"Valencia es una de las ciudades más soleadas de España, con más de 2.600 horas de sol al año.", pt:"Valência é uma das cidades mais ensolaradas de Espanha, com mais de 2.600 horas de sol por ano." },
+    time: { es:"En Valencia, muchas tiendas cierran al mediodía para el descanso, así que las tardes suelen ser más animadas.", pt:"Em Valência, muitas lojas fecham ao meio-dia para o descanso, por isso as tardes costumam ser mais animadas." },
+    place: { es:"El Jardín de Monforte es uno de los jardines históricos más antiguos de Valencia, con más de 150 años.", pt:"O Jardim de Monforte é um dos jardins históricos mais antigos de Valência, com mais de 150 anos." },
+    drink: { es:"La horchata original de Valencia se hace con chufa, un tubérculo que se cultiva en la huerta valenciana desde hace siglos.", pt:"A horchata original de Valência é feita com chufa, um tubérculo cultivado na horta valenciana há séculos." },
+    food: { es:"La paella nació en la huerta de Valencia y su nombre viene de 'paellera', la sartén en la que se cocina.", pt:"A paella nasceu na horta de Valência e o nome vem de 'paellera', a frigideira onde é cozinhada." }
+  };
+  let curiosityIndex = 0;
+  const curiosityKeys = Object.keys(curiosities);
+  function rotateCuriosity(key){
+    const c = curiosities[key];
+    const el = document.getElementById('curiosity-text');
+    el.dataset.es = c.es; el.dataset.pt = c.pt;
+    el.textContent = currentLang === 'es' ? c.es : c.pt;
+  }
+  document.getElementById('day-group').addEventListener('click', ()=> rotateCuriosity('day'));
+  document.getElementById('time-group').addEventListener('click', ()=> rotateCuriosity('time'));
+  document.getElementById('place-group').addEventListener('click', ()=> rotateCuriosity('place'));
+  document.getElementById('drink-group').addEventListener('click', ()=> rotateCuriosity('drink'));
+  document.getElementById('food-group').addEventListener('click', ()=> rotateCuriosity('food'));
+
+  updateCountdown();
+  document.getElementById('day-group').addEventListener('click', updateCountdown);
+
+  // petals
+  const petalWrap = document.body;
+  for(let i=0;i<10;i++){
+    const p = document.createElement('div');
+    p.className='petal';
+    p.style.left = (Math.random()*100)+'vw';
+    p.style.animationDuration = (8+Math.random()*8)+'s';
+    p.style.animationDelay = (Math.random()*10)+'s';
+    p.style.opacity = 0.3 + Math.random()*0.4;
+    p.style.background = Math.random() > 0.5 ? '#C23874' : '#D9662E';
+    petalWrap.appendChild(p);
+  }
+
+  // day chips
+  document.querySelectorAll('#day-group .chip').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('#day-group .chip').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      selected.day = btn.dataset.val;
+    });
+  });
+
+  // time chips
+  document.querySelectorAll('#time-group .chip').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('#time-group .chip').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      selected.time = btn.dataset.val;
+      checkReady();
+    });
+  });
+
+  // place cards
+  document.querySelectorAll('#place-group .card').forEach(card=>{
+    card.addEventListener('click', (e)=>{
+      if(e.target.tagName === 'INPUT') return;
+      document.querySelectorAll('#place-group .card').forEach(c=>{
+        c.classList.remove('active');
+        const other = c.querySelector('.card-other');
+        if(other) other.style.display='none';
+      });
+      card.classList.add('active');
+      selected.place = card.dataset.val;
+      const other = card.querySelector('.card-other');
+      if(other){
+        other.style.display='block';
+        other.querySelector('input').focus();
+      }
+      checkReady();
+    });
+  });
+  document.getElementById('place-other').addEventListener('input', (e)=>{
+    selected.placeOther = e.target.value;
+  });
+  document.getElementById('place-other').addEventListener('click', e=>e.stopPropagation());
+
+  // food cards (multi-selección)
+  document.querySelectorAll('#food-group .card').forEach(card=>{
+    card.addEventListener('click', (e)=>{
+      if(e.target.tagName === 'INPUT') return;
+      const val = card.dataset.val;
+      const already = selected.foods.find(f=>f.name===val);
+      const other = card.querySelector('.card-other');
+      if(already){
+        selected.foods = selected.foods.filter(f=>f.name!==val);
+        card.classList.remove('active');
+        if(other) other.style.display='none';
+      } else {
+        selected.foods.push({ name: val, place: card.dataset.place || '' });
+        card.classList.add('active');
+        if(other){
+          other.style.display='block';
+          other.querySelector('input').focus();
+        }
+      }
+    });
+  });
+  const foodOtherInput = document.getElementById('food-other');
+  if(foodOtherInput){
+    foodOtherInput.addEventListener('input', (e)=>{ selected.foodOther = e.target.value; });
+    foodOtherInput.addEventListener('click', e=>e.stopPropagation());
+  }
+
+  // drink pills (multi-selección)
+  document.querySelectorAll('#drink-group .pill').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const val = btn.dataset.val;
+      if(selected.drinks.includes(val)){
+        selected.drinks = selected.drinks.filter(d=>d!==val);
+        btn.classList.remove('active');
+      } else {
+        selected.drinks.push(val);
+        btn.classList.add('active');
+      }
+    });
+  });
+
+  // guests
+  const guestList = document.getElementById('guest-list');
+  document.getElementById('add-guest-btn').addEventListener('click', ()=>{
+    const row = document.createElement('div');
+    row.className = 'guest-row';
+    row.innerHTML = `<input type="text" placeholder="Nombre">`;
+    guestList.appendChild(row);
+    row.querySelector('input').focus();
+    row.querySelector('input').addEventListener('input', updateGuests);
+  });
+  function updateGuests(){
+    selected.guests = Array.from(guestList.querySelectorAll('input'))
+      .map(i=>i.value.trim()).filter(Boolean);
+  }
+
+  function checkReady(){
+    document.getElementById('btn-yes').disabled = !(selected.time && selected.place);
+  }
+  checkReady();
+
+  function buildSummaryText(){
+    const place = selected.place === 'Otro lugar' && selected.placeOther ? selected.placeOther : selected.place;
+    let foodNames = selected.foods.map(f=> f.name === 'Otro plato' && selected.foodOther ? selected.foodOther : f.name);
+    let lines = [];
+    lines.push(`Día: ${selected.day || '--'}`);
+    lines.push(`Hora: ${selected.time || '--'}`);
+    lines.push(`Lugar: ${place || '--'}`);
+    lines.push(`Bebidas: ${selected.drinks.length ? selected.drinks.join(', ') : '--'}`);
+    if(foodNames.length){
+      lines.push(`Platos: ${foodNames.join(', ')}`);
+    }
+    if(selected.guests.length){
+      lines.push(`Con: ${selected.guests.join(', ')}`);
+    }
+    return lines;
+  }
+
+  // ---- calendario (.ics) ----
+  function pad(n){ return n.toString().padStart(2,'0'); }
+  function nextDateForDay(dayName){
+    const map = { 'Domingo':0, 'Sábado':6, 'Viernes':5 };
+    const today = new Date();
+    if(!(dayName in map)){
+      // "Otro día" u otro valor: usamos el próximo sábado por defecto
+      dayName = 'Sábado';
+    }
+    const target = map[dayName];
+    let diff = (target - today.getDay() + 7) % 7;
+    if(diff === 0) diff = 7; // el próximo, no hoy
+    const d = new Date(today);
+    d.setDate(today.getDate() + diff);
+    return d;
+  }
+  function timeToHour(timeVal){
+    if(!timeVal) return 12;
+    if(timeVal.includes('10:00')) return 10;
+    if(timeVal.includes('13:00')) return 13;
+    if(timeVal.includes('17:00')) return 17;
+    return 12;
+  }
+  function buildICS(){
+    const date = nextDateForDay(selected.day);
+    const hour = timeToHour(selected.time);
+    date.setHours(hour, 0, 0, 0);
+    const end = new Date(date.getTime() + 90*60000);
+    const fmt = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+    const place = selected.place === 'Otro lugar' && selected.placeOther ? selected.placeOther : (selected.place || 'Valencia');
+    const ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'BEGIN:VEVENT',
+      `DTSTART:${fmt(date)}`,
+      `DTEND:${fmt(end)}`,
+      `SUMMARY:Encuentro con Nadiel`,
+      `LOCATION:${place}`,
+      `DESCRIPTION:Quedada como amigos en Valencia.`,
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+    return ics;
+  }
+  function downloadICS(){
+    const blob = new Blob([buildICS()], {type:'text/calendar'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'encuentro-valencia.ics';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  document.getElementById('btn-yes').addEventListener('click', ()=>{
+    updateGuests();
+    if(!selected.time || !selected.place) return;
+    const place = selected.place === 'Otro lugar' && selected.placeOther ? selected.placeOther : selected.place;
+    document.getElementById('screen-form').style.display = 'none';
+    const summaryEl = document.getElementById('summary-yes');
+    summaryEl.innerHTML = buildSummaryText().map(l=>{
+      const [k,v] = l.split(': ');
+      return `<div><b>${k}:</b> ${v}</div>`;
+    }).join('');
+    let msg = `¡Hola Nadiel! Confirmo para el ${(selected.day || 'sábado').toLowerCase()} 🌺%0A%0A`;
+    msg += `Hora: ${selected.time}%0A`;
+    msg += `Lugar: ${place}%0A`;
+    if(selected.drinks.length) msg += `Bebidas: ${selected.drinks.join(', ')}%0A`;
+    const foodNames = selected.foods.map(f=> f.name === 'Otro plato' && selected.foodOther ? selected.foodOther : f.name);
+    if(foodNames.length) msg += `Platos: ${foodNames.join(', ')}%0A`;
+    if(selected.guests.length) msg += `Voy con: ${selected.guests.join(', ')}%0A`;
+    document.getElementById('wa-link-yes').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+
+    // mapa del lugar elegido
+    const mapQuery = encodeURIComponent(`${place}, Valencia, España`);
+    document.getElementById('map-link').href = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+    document.getElementById('map-wrap').style.display = 'block';
+
+    // previsión del tiempo
+    document.getElementById('link-weather').href = `https://www.google.com/search?q=tiempo+valencia+espa%C3%B1a+${(selected.day||'sabado').toLowerCase()}`;
+
+    document.getElementById('screen-yes').classList.add('show');
+    celebrate();
+  });
+
+  // animação de confirmação
+  function celebrate(){
+    const icon = document.getElementById('yes-icon');
+    icon.style.transition = 'transform .5s cubic-bezier(.34,1.56,.64,1)';
+    icon.style.transform = 'scale(1.4) rotate(-8deg)';
+    setTimeout(()=>{ icon.style.transform = 'scale(1) rotate(0deg)'; }, 500);
+
+    const emojis = ['🌸','🌺','✨','🍊','🌼'];
+    for(let i=0;i<24;i++){
+      const e = document.createElement('div');
+      e.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      e.style.position = 'fixed';
+      e.style.left = (Math.random()*100)+'vw';
+      e.style.top = '-30px';
+      e.style.fontSize = (16+Math.random()*14)+'px';
+      e.style.zIndex = 50;
+      e.style.pointerEvents = 'none';
+      e.style.transition = `transform ${1.6+Math.random()*1.4}s ease-in, opacity ${1.6+Math.random()*1.4}s ease-in`;
+      document.body.appendChild(e);
+      requestAnimationFrame(()=>{
+        e.style.transform = `translateY(${100+Math.random()*10}vh) rotate(${Math.random()>0.5?360:-360}deg)`;
+        e.style.opacity = '0';
+      });
+      setTimeout(()=> e.remove(), 3200);
+    }
+  }
+
+  document.getElementById('btn-calendar').addEventListener('click', downloadICS);
+
+  document.getElementById('btn-no').addEventListener('click', ()=>{
+    document.getElementById('screen-form').style.display = 'none';
+    const msg = `Hola Nadiel, esta vez prefiero no quedar, pero gracias por la invitación 🫂`;
+    document.getElementById('wa-link-no').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    document.getElementById('screen-no').classList.add('show');
+  });
+</script>
+</body>
+</html>
